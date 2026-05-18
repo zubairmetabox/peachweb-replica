@@ -79,8 +79,49 @@ function replaceUrls(content) {
   return result;
 }
 
-const processedBody = replaceUrls(bodyContent);
+function removeById(html, id) {
+  const marker = `id="${id}"`;
+  const markerPos = html.indexOf(marker);
+  if (markerPos === -1) return html;
+  const tagStart = html.lastIndexOf('<', markerPos);
+  let depth = 0, i = tagStart;
+  while (i < html.length) {
+    if (html[i] === '<') {
+      if (html.startsWith('</', i)) {
+        depth--;
+        if (depth === 0) {
+          const closeEnd = html.indexOf('>', i) + 1;
+          return html.slice(0, tagStart) + html.slice(closeEnd);
+        }
+        i = html.indexOf('>', i) + 1;
+      } else {
+        const tagEnd = html.indexOf('>', i);
+        if (!html.slice(i, tagEnd + 1).endsWith('/>')) depth++;
+        i = tagEnd + 1;
+      }
+    } else { i++; }
+  }
+  return html;
+}
+
+let processedBody = replaceUrls(bodyContent);
 const processedStyles = replaceUrls(inlineStyles);
+
+const REMOVE_IDS = [
+  'i54bq-2-2',  // hero text: "3D Websites in Minutes" + CTAs
+  'ir9fo',      // main nav bar
+  'icy7f',      // nav wrapper + mobile overlays
+  'i0gnr9t',    // Resources mobile overlay
+  'i25h83e',    // Product mobile overlay
+  'i27b3qz',    // Use Cases mobile overlay
+  'iolnzn9',    // W./Honors badge
+  'i4qyc',      // "Scroll down & dive in" button
+  'iawqb1g',    // scroll hint
+  'ilex4h',     // secondary hero copy
+];
+for (const id of REMOVE_IDS) {
+  processedBody = removeById(processedBody, id);
+}
 
 const hoverScript = `
 <script>
