@@ -1,0 +1,138 @@
+#pwb-error-page-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  min-height: 100vh;
+  z-index: 1;
+  transition: opacity 0.3s;
+  background-color: #06040a;
+}
+
+.pwb-error-page-relative-container {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pwb-error-page-gradient-ellipse {
+  position: absolute;
+  right: -750px;
+  bottom: -571px;
+
+  width: 992px;
+  height: 894px;
+  border-radius: 992px;
+  background: rgba(51, 0, 255, 0.4);
+  filter: blur(250px);
+}
+
+.pwb-error-page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  font-family: Inter;
+  padding: 0px 16px;
+}
+
+h1.pwb-error-page-title {
+  font-family: Inter;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 29.05px;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+p.pwb-error-page-description {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16.94px;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  margin-top: 8px;
+}
+
+button.reset-button {
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+  text-decoration: none;
+  background: transparent;
+  appearance: none;
+
+  /* inherit font & color from ancestor */
+  color: inherit;
+  font: inherit;
+
+  /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
+  line-height: normal;
+
+  /* Corrects font smoothing for webkit */
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+
+  /* Corrects inability to style clickable `input` types in iOS */
+  -webkit-appearance: none;
+}
+
+button.reset-button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+button#pwb-error-page-refresh-button {
+  padding: 12px 24px;
+  margin: 0;
+  margin-top: 32px;
+  gap: 8px;
+  border-radius: 6px;
+  background-color: #4b71f7;
+
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+button#pwb-error-page-refresh-button:hover {
+  box-shadow: 0 0 0 1px #2a3f8b;
+}
+
+button#pwb-error-page-refresh-button:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #2a3f8b;
+}
+
+.pwb-error-page-ic-arrow-clockwise {
+  width: 16px;
+  height: 16px;
+  background-image: url('data:image/svg+xml;charset=utf-8,<svg width="17" height="16" viewBox="0 0 17 16" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M15.5 3.49993V6.49993C15.5 6.63253 15.4473 6.75971 15.3535 6.85348C15.2598 6.94725 15.1326 6.99993 15 6.99993H12C11.8674 6.99993 11.7402 6.94725 11.6464 6.85348C11.5527 6.75971 11.5 6.63253 11.5 6.49993C11.5 6.36732 11.5527 6.24014 11.6464 6.14637C11.7402 6.0526 11.8674 5.99993 12 5.99993H13.7125L12.0506 4.47743L12.035 4.46243C11.34 3.76773 10.4558 3.29321 9.49272 3.09814C8.52964 2.90307 7.53044 2.9961 6.61993 3.36561C5.70942 3.73512 4.92797 4.36473 4.37321 5.17578C3.81844 5.98683 3.51495 6.94336 3.50066 7.92589C3.48636 8.90842 3.76189 9.87338 4.29283 10.7002C4.82376 11.5271 5.58656 12.1791 6.48594 12.575C7.38531 12.9708 8.38138 13.0929 9.34973 12.9259C10.3181 12.759 11.2157 12.3104 11.9306 11.6362C12.027 11.545 12.1557 11.4959 12.2883 11.4996C12.4209 11.5032 12.5466 11.5595 12.6378 11.6559C12.729 11.7523 12.7781 11.8809 12.7744 12.0135C12.7707 12.1462 12.7145 12.2719 12.6181 12.3631C11.5065 13.4173 10.032 14.0034 8.49999 13.9999H8.41749C7.43483 13.9865 6.47052 13.7318 5.60931 13.2584C4.7481 12.785 4.01636 12.1073 3.47841 11.2848C2.94045 10.4624 2.61276 9.5204 2.52412 8.54165C2.43548 7.5629 2.58862 6.57736 2.97006 5.67165C3.35151 4.76594 3.94959 3.96779 4.71174 3.34736C5.47389 2.72693 6.37677 2.3032 7.34103 2.11342C8.30528 1.92365 9.3014 1.97363 10.2418 2.25898C11.1822 2.54433 12.0382 3.05631 12.7344 3.74993L14.5 5.36243V3.49993C14.5 3.36732 14.5527 3.24014 14.6464 3.14637C14.7402 3.0526 14.8674 2.99993 15 2.99993C15.1326 2.99993 15.2598 3.0526 15.3535 3.14637C15.4473 3.24014 15.5 3.36732 15.5 3.49993Z" fill="white"/></svg>');
+}
+
+.pwb-error-page-refresh-button-text {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 15px;
+  text-align: left;
+}
+
+@media screen and (max-width: 768px) {
+  .pwb-error-page-gradient-ellipse {
+    bottom: -638px;
+    right: -806px;
+  }
+}
