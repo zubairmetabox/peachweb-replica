@@ -44,10 +44,12 @@
 
     // Required by the PeachWeb runtime (191.script.js).
     // Must return a blob URL string — the router fetches it and checks the Content-Type header.
+    // Also intercepts the scene-state JSON to inject live bait config from localStorage.
     window._pwLoadFileFromCache = async function(url) {
       const localUrl = _pwLocalUrl(url);
       const res = await fetch(localUrl);
       if (!res.ok) throw new Error('Failed to load asset: ' + localUrl);
+
       const blob = await res.blob();
       return URL.createObjectURL(blob);
     };
@@ -498,6 +500,77 @@ document.addEventListener("DOMContentLoaded", function() {
 </div>
 </div><img src="assets/images/gallery-9.jpg" loading="lazy" id="ilwnepj-2-2-3-3"/></div></div></div></div><div id="iee4h3-3-2" class="pwb-anchor"></div></div></div></div></div>
 
+<!-- ── Bait position / scale controls ── -->
+<div id="bait-ctrl" style="position:fixed;bottom:24px;right:24px;z-index:999999;background:rgba(0,0,0,0.82);color:#fff;padding:18px 20px;border-radius:14px;font-family:monospace;font-size:13px;width:260px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.12);">
+  <div style="font-weight:700;margin-bottom:12px;font-size:14px;">Bait Controls</div>
+  <label>Scale <span id="lbl-scale"></span></label>
+  <input id="sl-scale" type="range" min="0.5" max="30" step="0.1" style="width:100%;margin-bottom:10px">
+  <div style="border-top:1px solid rgba(255,255,255,0.15);margin:8px 0;padding-top:8px;font-size:11px;opacity:0.5">POSITION</div>
+  <label>X <span id="lbl-x"></span></label>
+  <input id="sl-x" type="range" min="-1" max="1" step="0.005" style="width:100%;margin-bottom:10px">
+  <label>Y <span id="lbl-y"></span></label>
+  <input id="sl-y" type="range" min="-1" max="1" step="0.005" style="width:100%;margin-bottom:10px">
+  <div style="border-top:1px solid rgba(255,255,255,0.15);margin:8px 0;padding-top:8px;font-size:11px;opacity:0.5">ROTATION (deg)</div>
+  <label>Rot X <span id="lbl-rx"></span></label>
+  <input id="sl-rx" type="range" min="-180" max="180" step="1" style="width:100%;margin-bottom:10px">
+  <label>Rot Y <span id="lbl-ry"></span></label>
+  <input id="sl-ry" type="range" min="-180" max="180" step="1" style="width:100%;margin-bottom:10px">
+  <label>Rot Z <span id="lbl-rz"></span></label>
+  <input id="sl-rz" type="range" min="-180" max="180" step="1" style="width:100%;margin-bottom:14px">
+  <button onclick="applyBait()" style="width:100%;padding:8px;border-radius:8px;border:none;background:#6c3fff;color:#fff;font-weight:700;cursor:pointer;margin-bottom:6px;">Apply & Reload</button>
+  <button onclick="copyBait()" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.3);background:transparent;color:#fff;cursor:pointer;">Copy Values</button>
+</div>
+<script>
+(function() {
+  var keys   = ['scale','x','y'];
+  var rotKeys = ['rx','ry','rz'];
+  var DEG = Math.PI / 180;
+
+  function initSliders(cfg) {
+    keys.forEach(function(k) {
+      var sl = document.getElementById('sl-' + k);
+      sl.value = cfg[k];
+      document.getElementById('lbl-' + k).textContent = parseFloat(cfg[k]).toFixed(3);
+      sl.addEventListener('input', function() {
+        document.getElementById('lbl-' + k).textContent = parseFloat(this.value).toFixed(1);
+      });
+    });
+    // rotation stored as radians, display as degrees
+    var rx = cfg.rx !== undefined ? cfg.rx : 80;
+    var ry = cfg.ry !== undefined ? cfg.ry : 0;
+    var rz = cfg.rz !== undefined ? cfg.rz : 0;
+    [['rx',rx],['ry',ry],['rz',rz]].forEach(function(pair) {
+      var sl = document.getElementById('sl-' + pair[0]);
+      sl.value = pair[1];
+      document.getElementById('lbl-' + pair[0]).textContent = pair[1] + '°';
+      sl.addEventListener('input', function() {
+        document.getElementById('lbl-' + pair[0]).textContent = this.value + '°';
+      });
+    });
+  }
+
+  fetch('/bait-config').then(function(r){ return r.json(); }).then(initSliders);
+
+  window.applyBait = function() {
+    var c = {};
+    keys.forEach(function(k) { c[k] = parseFloat(document.getElementById('sl-' + k).value); });
+    rotKeys.forEach(function(k) { c[k] = parseFloat(document.getElementById('sl-' + k).value); });
+    fetch('/apply-bait', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(c)
+    }).then(function() { location.reload(); });
+  };
+
+  window.copyBait = function() {
+    var c = {};
+    keys.forEach(function(k) { c[k] = parseFloat(document.getElementById('sl-' + k).value); });
+    rotKeys.forEach(function(k) { c[k] = parseFloat(document.getElementById('sl-' + k).value); });
+    navigator.clipboard.writeText(JSON.stringify(c, null, 2));
+  };
+
+})();
+</script>
 
 </body>
 </html>
